@@ -11,6 +11,7 @@ const app = express();
 
 // CORS configuration
 const allowedOrigins = ['http://localhost:5173', 'https://store-review-hzkj.vercel.app'];
+
 app.use(cors({
     origin: function (origin, callback) {
         if (!origin) return callback(null, true); // allow requests with no origin (like mobile apps)
@@ -21,8 +22,16 @@ app.use(cors({
         }
         return callback(null, true);
     },
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],  // Allow preflight methods
+    allowedHeaders: ['Content-Type', 'Authorization'],  // Allow headers
     credentials: true,
 }));
+
+// Log request origin to debug CORS issues
+app.use((req, res, next) => {
+    console.log('Request Origin:', req.get('Origin'));  // Logs the request origin
+    next();
+});
 
 app.use(express.json());
 
