@@ -10,10 +10,28 @@ require('dotenv').config();
 const app = express();
 
 // CORS configuration
+const allowedOrigins = [
+  "http://localhost:5173", 
+  "https://store-review-hzkj.vercel.app" 
+];
+
 app.use(cors({
-    origin: 'http://localhost:5173', // Adjust this as necessary
-    credentials: true,
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  methods: "GET,POST,PUT,DELETE",
+  allowedHeaders: "Content-Type,Authorization"
 }));
+
+// Log request origin to debug CORS issues
+app.use((req, res, next) => {
+    console.log('Request Origin:', req.get('Origin'));  // Logs the request origin
+    next();
+});
 
 app.use(express.json());
 
