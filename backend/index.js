@@ -10,8 +10,17 @@ require('dotenv').config();
 const app = express();
 
 // CORS configuration
+const allowedOrigins = ['http://localhost:5173', 'https://store-review-hzkj.vercel.app'];
 app.use(cors({
-    origin: 'http://localhost:5173', // Adjust this as necessary
+    origin: function (origin, callback) {
+        if (!origin) return callback(null, true); // allow requests with no origin (like mobile apps)
+
+        if (allowedOrigins.indexOf(origin) === -1) {
+            const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+            return callback(new Error(msg), false);
+        }
+        return callback(null, true);
+    },
     credentials: true,
 }));
 
