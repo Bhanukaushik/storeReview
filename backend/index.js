@@ -11,8 +11,7 @@ const app = express();
 
 // CORS configuration
 const allowedOrigins = [
-  "http://localhost:5173", 
-  "https://store-review-hzkj.vercel.app" 
+  "http://localhost:5173"
 ];
 
 app.use(cors({
