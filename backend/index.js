@@ -10,7 +10,7 @@ require('dotenv').config();
 const app = express();
 
 // CORS configuration
-const allowedOrigins = ['http://localhost:5173'];
+const allowedOrigins = ['http://localhost:5173' , 'https://store-review-main.vercel.app'];
 app.use(cors({
     origin: function (origin, callback) {
         if (!origin) return callback(null, true); 
