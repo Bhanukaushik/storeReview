@@ -91,23 +91,31 @@ const UserDashboard = () => {
     };
 
     const handleUpdatePassword = async () => {
+        if (!passwordModal.oldPassword || !passwordModal.newPassword) {
+          setMessage({ type: "danger", text: "Both old and new passwords are required" });
+          return;
+        }
+      
         try {
-            await axios.put(`${API_BASE_URL}/auth/update-password`, {
-                email: user.email,
-                password: passwordModal.newPassword
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                },
-                withCredentials: true
-            });
-            setMessage({ type: "success", text: "Password updated successfully!" });
+          await axios.put(`${API_BASE_URL}/auth/update-password`, 
+            {
+              oldPassword: passwordModal.oldPassword,
+              newPassword: passwordModal.newPassword
+            }, 
+            {
+              headers: { Authorization: `Bearer ${token}` }
+            }
+          );
+          setMessage({ type: "success", text: "Password updated successfully!" });
         } catch (error) {
-            setMessage({ type: "danger", text: error.response?.data?.error || "Error updating password." });
+          console.error("Update error:", error.response?.data);
+          setMessage({ 
+            type: "danger", 
+            text: error.response?.data?.error || "Password update failed. Check console for details."
+          });
         }
         setPasswordModal({ show: false, oldPassword: "", newPassword: "" });
-    };
+      };
 // Star Rating Component
     const StarRating = ({ storeId, userRating }) => {
         const [rating, setRating] = useState(userRating || 0);
